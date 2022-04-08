@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Results</title>
+</head>
+<body>
+    {% if results_list %}
+    <div>
+    <caption>Test results table</caption>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Squad</th>
+            <th>Failed tests</th>
+        </tr>
+        {% for res in results_list %}
+        <tr>
+            <th>{{ res.id }}</th>
+            <th>{{ res.test_date }}</th>
+            <th>{{ res.status }}</th>
+            <th>{{ res.squad }}</th>
+            <th>{{ res.failed_tests }}</th>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+        No test results
+    {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Result</title>
+</head>
+<body>
+    <div>
+    <form action="{% url 'thanks_page' %}" method="POST">
+        {% csrf_token %}
+<!--        <label>Squad</label>-->
+<!--        <input name="squad">-->
+<!--        <label>Failed Tests</label>-->
+<!--        <input name="failedTests">-->
+<!--        <label>Status</label>-->
+<!--        <input name="status">-->
+        {{ form }}
+        <button type="submit" class="btn btn-success">APPLY</button>
+    </form>
+    </div>
+</body>
+</html>
