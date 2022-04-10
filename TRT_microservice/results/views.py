@@ -1,52 +1,72 @@
-from django.shortcuts import render
+import time
+
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from .models import TestResults
-from .forms import ResultForm
+from .serializers import AddResultSerializer, ListResultSerializer
 
 
-def main_page(request):
-    results_list = TestResults.objects.all()
-    return render(
-        request,
-        './index.html',
-        {'results_list': results_list}
-    )
+class AddResultView(generics.CreateAPIView):
+    # class AddResultView(APIView):
+    serializer_class = AddResultSerializer
+
+    # {"squad": "My squad", "failed_tests": 2, "status": "passed"}
+    # def post(self, request, format=None):
+    #     squad = request.data.get('squad')
+    #     failed_tests = request.data.get('failed_tests')
+    #     status = request.data.get('status')
+    #
+    #     result_to_add = TestResults(squad=squad, failed_tests=failed_tests, status=status)
+    #     result_to_add.save()
+    #
+    #     return Response(status=st.HTTP_201_CREATED)
 
 
-def add_result(request):
-    form = ResultForm()
-    results_list = TestResults.objects.all()
-    return render(
-        request,
-        './add_results.html',
-        {'results_list': results_list, 'form': form}
-    )
+class GetResultsView(generics.ListAPIView):
+    # queryset = TestResults.objects.all()
+    # def get(self, request):
+    #     daysToFollow = request.data.get('daysToFollow')
+    #     squad = request.data.get('squad')
+    #     current_day = time.time()
+    #     sql_request = 'SELECT test_date, sum(failedTests) as noffailures ' \
+    #                   'GROUP BY test_date' \
+    #                   f'HAVING squad = {squad} AND test_date > ({current_day} - {daysToFollow})'
+    #     print(sql_request)
+    #     return sql_request
 
 
-def thanks_page(request):
-    squad = request.POST['squad']
-    failed_tests = request.POST['failedTests']
-    status = request.POST['status']
-
-    result_to_add = TestResults(squad=squad, failed_tests=failed_tests, status=status)
-    result_to_add.save()
-
-    return render(
-        request,
-        './thanks_page.html',
-        {
-            'text': 'Test results were added successfully!',
-            'squad': squad,
-            'failed_tests': failed_tests,
-            'status': status
-        }
-    )
+    queryset = TestResults.objects.all()
+    serializer_class = ListResultSerializer
 
 
-def results(request):
-    pass
-    # totalDaysfailed
-    # verdict: “unstable”, “stable”
-    # lastFailureUnfixedDays: сколько дней последняя ошибка была непочиненной
+    # def get(self, request):
+    #     details = {...},  # “mm/dd/yyyy” : { status: ”b”, noffailrues: “y” }
+    #     data_dict = {
+    #         "details": details,
+    #         "totalDaysfailed": ...,
+    #         "verdict": ...,
+    #         "lastFailureUnfixedDays": ...
+    #     }
+    #     return Response(data_dict, status=status.HTTP_200_OK)
+
+    # def get(self, request):
+    #     return Response({'some': 'data'})
+    # serializer_class = ListResultSerializer
+    # queryset = TestResults.objects.all()
+
+    # def get(self, request, *args, **kwargs):
+
+    # def get(self, request, format='json'):
+    #     squad = request.data.get('squad')
+    #     days_to_follow = request.data.get('daysToFollow:')
+    #
+    #     queryset = TestResults.objects.all()
+    #
+    #     # ЗДЕСЬ ЗАПРОС В БД
+    #     return Response()
+
 
 '''{ “details”: {
  “mm/dd1/yyyy” : { status: ”passed”, noffailrues: “0” }
